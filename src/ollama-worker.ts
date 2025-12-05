@@ -1,12 +1,11 @@
 import Ollama, { Message } from 'ollama';
-import { OLLAMA_MODEL } from './constants';
 import { streamToken } from './requests';
 
 export async function runOllama(
   prompt: string | Message[],
+  model: string,
   correlation_id?: string,
-  format: string | undefined = undefined,
-  model: string = OLLAMA_MODEL
+  format?: string,
 ): Promise<string> {
   const messages = Array.isArray(prompt)
     ? (prompt as Message[])

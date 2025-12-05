@@ -54,14 +54,18 @@ app.post('/ask', apiKeyAuth, async (req: any, res: any) => {
 
   const correlationId = req.query.correlation_id;
   const streaming = req.query.streaming === 'true';
+
   if (streaming && !correlationId)
     return res.status(400).json({ error: 'Missing correlation id' });
+
+  const model = req.query.model;
+  if (!model) return res.status(400).json({ error: 'Missing model' });
 
   const format = req.query.format;
 
   try {
-    const result = await runOllama(prompt, correlationId, format);
-    res.json({ response: result });
+    const result = await runOllama(prompt, model, correlationId, format);
+    res.json({ response: result, model });
   } catch (err) {
     res.status(500).json({ error: err?.toString() });
   }
